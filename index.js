@@ -15,20 +15,23 @@ async function start() {
     "Let's play a game where you (human) make up a number and I (computer) try to guess it."
   );
 
+  let maxStart = await ask("What is the top of the range you want me to guess between?\n"
+  );
+  
   let secretNumber = await ask(
     "What is your secret number?\nI won't peek, I promise...\n"
   );
 
   console.log("You entered: " + secretNumber);
 
-  let randomNumber = Math.floor(Math.random() * (101 - 1) + 1);
+  let randomNumber = Math.floor(Math.random() * (maxStart) + 1);
 
   let guess = await ask(`Is your number ${randomNumber}? \nYes or No y/n \n`);
 
   let gameOn = true;
 
   let min = 0;
-  let max = 100;
+  let max = maxStart;
   // let allowedGuesses = Math.floor(Math.log2(max) + 1);
   let numberOfGuesses = 1;
 
@@ -57,10 +60,10 @@ async function start() {
 
     guess = await ask(`Is your number ${randomNumber}? \nYes or No y/n \n`);
     numberOfGuesses++;
-    // if (guess === "y"){
-    //   console.log(`I guessed your number in ${numberOfGuesses} attempts!`)
-    //   process.exit();
-  //}
+    if (guess === "y"){
+      console.log(`I guessed your number in ${numberOfGuesses} attempts!`)
+      process.exit();
+  }
 }}
 
 
