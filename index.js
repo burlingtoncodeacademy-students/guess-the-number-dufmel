@@ -17,6 +17,12 @@ async function start() {
 
   let maxStart = await ask("What is the top of the range you want me to guess between?\n"
   );
+
+  if((maxStart <= 1) || isNaN(maxStart)){
+    console.log("You must enter a positive interger great than 1");
+    maxStart = await ask("What is the top of the range you want me to guess between?\n"
+    );
+  }
   
   let secretNumber = await ask(
     "What is your secret number?\nI won't peek, I promise...\n"
