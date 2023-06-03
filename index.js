@@ -11,52 +11,57 @@ function ask(questionText) {
 start();
 
 async function start() {
-  console.log("Let's play a game where you (human) make up a number and I (computer) try to guess it.")
+  console.log(
+    "Let's play a game where you (human) make up a number and I (computer) try to guess it."
+  );
 
-  let secretNumber = await ask("What is your secret number?\nI won't peek, I promise...\n");
+  let secretNumber = await ask(
+    "What is your secret number?\nI won't peek, I promise...\n"
+  );
 
-  console.log('You entered: ' + secretNumber);
+  console.log("You entered: " + secretNumber);
 
-  let randomNumber = Math.floor(Math.random() * 101);
+  let randomNumber = Math.floor(Math.random() * (101 - 1) + 1);
 
   let guess = await ask(`Is your number ${randomNumber}? \nYes or No y/n \n`);
-  
-      if (guess.trim().toLowerCase() === "n") {
-        gameOn = true;
-      } else {
-        gameOn = false;
-      }
 
-      let min = 0;
-      let max = 100;
+  let gameOn = true;
+
+  let min = 0;
+  let max = 100;
+  // let allowedGuesses = Math.floor(Math.log2(max) + 1);
+  let numberOfGuesses = 1;
+
+  if (guess.trim().toLowerCase() === "n") {
+    gameOn = true;
+  } else if (guess === "y"){
+      console.log(`I guessed your number in ${numberOfGuesses} attempts!`)
+      process.exit();}
 
   while (gameOn) {
-  
+
     let newNum = (min, max) => {
-      randomNumber = Math.floor(Math.random() * (max - min) + min);
-      
+      randomNumber = Math.floor((max + min) / 2);
     };
-    
-    console.log(randomNumber)
 
     let response = await ask("Is your number higher or lower h/l? \n");
     
+
     if (response.trim().toLowerCase() === "h") {
-      min = randomNumber + 1 ;
-      console.log(min, max);
+      min = randomNumber + 1;
       newNum(min, max);
-      // guess = await ask(`Is your number ${randomNumber}? \nYes or No y/n \n`);      
-          
     } else if (response.trim().toLowerCase() === "l") {
       max = randomNumber - 1;
-      console.log(min, max);
-      newNum(min, max)
-      // guess = await ask(`Is your number ${randomNumber}? \nYes or No y/n \n`);
+      newNum(min, max);
     }
-  
-  guess = await ask(`Is your number ${randomNumber}? \nYes or No y/n \n`);
-  
-}
-console.log("I guessed your number!");
-    process.exit();
-}
+
+    guess = await ask(`Is your number ${randomNumber}? \nYes or No y/n \n`);
+    numberOfGuesses++;
+    if (guess === "y"){
+      console.log(`I guessed your number in ${numberOfGuesses} attempts!`)
+      process.exit();
+  }
+
+}}
+
+
