@@ -57,11 +57,10 @@ async function start() {
 
     guess = await ask(`Is your number ${randomNumber}? \nYes or No y/n \n`);
     numberOfGuesses++;
-    if (guess === "y"){
-      console.log(`I guessed your number in ${numberOfGuesses} attempts!`)
-      process.exit();
-  }
-
+    // if (guess === "y"){
+    //   console.log(`I guessed your number in ${numberOfGuesses} attempts!`)
+    //   process.exit();
+  //}
 }}
 
 
