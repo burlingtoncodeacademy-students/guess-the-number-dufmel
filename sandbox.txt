@@ -1,0 +1,69 @@
+let direction
+let lowerNumber
+let higherNumber
+
+  if (guess.toLowerCase() == "y"){
+    console.log('I guessed your answer');
+    process.exit();
+  }else if (guess.toLowerCase() == "n"){
+    direction = await ask("Is your number [h]igher or [l]ower?");
+  }
+  
+
+  if (direction.toLowerCase() == "l"){
+  lowerNumber = Math.floor(Math.random() * randomNumber + 1);  
+  guess = await ask((
+    `Is your number ${lowerNumber}?
+    [y]es/[n]o`));
+    direction = await ask("Is your number [h]igher or [l]ower?");
+    
+  } else if (direction.toLowerCase() == "h"){
+    higherNumber = Math.floor(
+      Math.random() * (101 - randomNumber) + randomNumber);
+    guess = await ask((
+    `Is your number ${higherNumber}?
+    [y]es/[n]o`));
+    direction = await ask("Is your number [h]igher or [l]ower?");
+  }
+  
+while (guess.toLowerCase() == "n"){
+    if (direction.toLowerCase() == "l") {
+      lowerNumber = Math.floor(Math.random() * higherNumber + 1);
+      guess = await ask(
+        `Is your number ${lowerNumber}?
+    [y]es/[n]o`
+      );
+    } else if (direction.toLowerCase() == "h") {
+      higherNumber = Math.floor(
+        Math.random() * (higherNumber - lowerNumber) + lowerNumber
+      );
+      guess = await ask(
+        `Is your number ${higherNumber}?
+    [y]es/[n]o`
+      );
+    }
+direction = await ask("Is your number [h]igher or [l]ower?")
+}
+
+
+if (guess.toLowerCase().trim() == "y") {
+      console.log("I guessed your answer");
+      process.exit();
+      } else if (guess.toLowerCase().trim() == "n") {
+        while(guess.toLowerCase().trim() == "n"){
+        direction = await ask("Is your number [h]igher or [l]ower?");
+            if (direction.toLowerCase() == "l"){
+              randomNumber = Math.floor(Math.random() * randomNumber + 1);  
+              guess = await ask((
+                `Is your number ${randomNumber}?
+                [y]es/[n]o`));
+                ;
+    
+            } else if (direction.toLowerCase() == "h"){
+              randomNumber = Math.floor(
+                Math.random() * (101 - randomNumber) + randomNumber);
+              guess = await ask((
+              `Is your number ${randomNumber}?
+              [y]es/[n]o`));
+              ;
+            }}}

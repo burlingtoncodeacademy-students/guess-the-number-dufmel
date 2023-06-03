@@ -1,3 +1,4 @@
+const { truncate } = require('fs');
 const readline = require('readline');
 const rl = readline.createInterface(process.stdin, process.stdout);
 
@@ -16,32 +17,46 @@ async function start() {
 
   console.log('You entered: ' + secretNumber);
 
-  let randomNumber = Math.floor(Math.random() * 101)
+  let randomNumber = Math.floor(Math.random() * 101);
 
-  let guess = await ask(`Is your number ${randomNumber}? [y]es/[n]o`);
-
-  let direction 
+  let guess = await ask(`Is your number ${randomNumber}? \nYes or No y/n \n`);
   
-  if (guess.toLowerCase() == "y"){
-    console.log('I guessed your answer')
-  }else if (guess.toLowerCase() == "n"){
-    direction = await ask("Is your number [h]igher or [l]ower?")
+      if (guess.trim().toLowerCase() === "n") {
+        gameOn = true;
+      } else {
+        gameOn = false;
+      }
+
+      let min = 0;
+      let max = 100;
+
+  while (gameOn) {
+  
+    let newNum = (min, max) => {
+      randomNumber = Math.floor(Math.random() * (max - min) + min);
+      
+    };
+    
+    console.log(randomNumber)
+
+    let response = await ask("Is your number higher or lower h/l? \n");
+    
+    if (response.trim().toLowerCase() === "h") {
+      min = randomNumber + 1 ;
+      console.log(min, max);
+      newNum(min, max);
+      // guess = await ask(`Is your number ${randomNumber}? \nYes or No y/n \n`);      
+          
+    } else if (response.trim().toLowerCase() === "l") {
+      max = randomNumber - 1;
+      console.log(min, max);
+      newNum(min, max)
+      // guess = await ask(`Is your number ${randomNumber}? \nYes or No y/n \n`);
     }
-
-  if (direction.toLowerCase() == "l"){
-    guess = await ask(
-    `Is your number ${Math.floor(Math.random() * randomNumber + 1)}?
-    [y]es/[n]o`);
-  } else if (direction.toLowerCase() == "h"){
-    guess = await ask(
-    `Is your number ${Math.floor(Math.random() * (101 - randomNumber) + randomNumber)}?
-    [y]es/[n]o`
-    );
-  }
-
-direction = await ask("Is your number [h]igher or [l]ower?")
-
-  // Now try and complete the program.
-  process.exit();
+  
+  guess = await ask(`Is your number ${randomNumber}? \nYes or No y/n \n`);
+  
 }
-
+console.log("I guessed your number!");
+    process.exit();
+}
