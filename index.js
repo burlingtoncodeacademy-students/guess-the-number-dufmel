@@ -17,6 +17,9 @@ async function start(){
     startReverseGame()
   }else if (gameChoice.trim().toLowerCase() == "computer"){
      startGame()
+  } else {
+    console.log("That is not a valid option.");
+    start()
   }
 }
 
@@ -40,6 +43,13 @@ async function startGame() {
     "What is your secret number?\nI won't peek, I promise...\n"
   );
 
+  if (isNaN(secretNumber)){
+    console.log("That is not a valid input")
+    secretNumber = await ask(
+      "What is your secret number?\nI won't peek, I promise...\n"
+    );
+  }
+
   console.log("You entered: " + secretNumber);
 
   let randomNumber = Math.floor(Math.random() * (maxStart) + 1);
@@ -52,7 +62,10 @@ async function startGame() {
   } else if (guess === "y") {
     console.log(`I guessed your number in ${numberOfGuesses} attempt!`);
     process.exit();
-  } 
+  } else {
+    console.log("That is not a valid option")
+    guess = await ask(`Is your number ${randomNumber}? \nYes or No y/n \n`);
+  }
 
   let minNum = Number(1);
   let maxNum = Number(maxStart);
@@ -76,11 +89,19 @@ async function startGame() {
     } else if (response.trim().toLowerCase() === "l") {
       maxNum = randomNumber - 1;
       console.log(`In the else if statement, randomNumber = ${randomNumber}`);
+    } else {
+      console.log("That is not a valid entry")
+      response = await ask("Is your number higher or lower h/l? \n");
+    }
+
+    if (minNum == maxNum){
+      console.log(`You're cheating! Game Over`)
+      process.exit()
     }
 
     console.log(`This console is after if/esle statement randomNumber = ${randomNumber} minNum = ${minNum}, maxNum = ${maxNum}`)
         
-    let newNum = () => {
+    let generateNewNum = () => {
       console.log(`In the newNum function min = ${minNum} and max = ${maxNum}`);
       let temporaryNumber = minNum + maxNum
       console.log(temporaryNumber)
@@ -89,7 +110,7 @@ async function startGame() {
       return firstAnswer
       };
 
-    console.log(randomNumber = newNum(minNum, maxNum));
+    console.log(randomNumber = generateNewNum(minNum, maxNum));
 
     guess = await ask(`Is your number ${randomNumber}? \nYes or No y/n \n`);
 
@@ -126,6 +147,9 @@ async function startReverseGame() {
   if (guess == randomNumber) {
     console.log(`You guessed my number in ${numberOfGuesses} try!`);
     process.exit();
+  } else if (isNaN(guess)){
+    console.log("That is not a valid entry")
+    guess = await ask(`What is your guess? \n`);
   } else {
     gameOn = true;
   }
