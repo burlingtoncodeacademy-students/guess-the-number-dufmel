@@ -33,50 +33,56 @@ async function start() {
   let randomNumber = Math.floor(Math.random() * (maxStart) + 1);
 
   let guess = await ask(`Is your number ${randomNumber}? \nYes or No y/n \n`);
-
   let gameOn = true;
-
-  let min = 0;
-  let max = maxStart;
-  // let allowedGuesses = Math.floor(Math.log2(max) + 1);
-  let numberOfGuesses = 1;
 
   if (guess.trim().toLowerCase() === "n") {
     gameOn = true;
-  } else if (guess === "y"){
-      console.log(`I guessed your number in ${numberOfGuesses} attempts!`)
-      process.exit();}
+  } else if (guess === "y") {
+    console.log(`I guessed your number in ${numberOfGuesses} attempt!`);
+    process.exit();
+  }
 
+  let minNum = 1;
+  let maxNum = maxStart;
+  let numberOfGuesses = 1;
+
+  
+  //*************GAME LOOP**************** */
+  
   while (gameOn) {
+    
+    console.log(`The randomNumber on the new iteration of the while loop is ${randomNumber}`)
 
-    let newNum = (min, max) => {
-      randomNumber = Math.floor((max + min) / 2);
-    };
+
+    console.log(`This is ${numberOfGuesses} minNum = ${minNum} and maxNum = ${maxNum}`)
 
     let response = await ask("Is your number higher or lower h/l? \n");
-    
 
     if (response.trim().toLowerCase() === "h") {
-      min = randomNumber + 1;
-      newNum(min, max);
+      minNum = randomNumber + 1;
+      console.log(`In the if statement, randomNumber = ${randomNumber}`)
     } else if (response.trim().toLowerCase() === "l") {
-      max = randomNumber - 1;
-      newNum(min, max);
+      maxNum = randomNumber - 1;
+      console.log(`In the else if statement, randomNumber = ${randomNumber}`);
     }
 
-    console.log(min, max)
-    if (newNum > max ){
-      console.log(`You already said it was higher than ${max} so it cannot also be higher than ${max + 1}`)
-    } else if (newNum < min){
-      console.log(`You already said it was lower than ${min} so it cannot also be higher than ${min - 1}`)
-    }
+    console.log(`This console is after if/esle statement randomNumber = ${randomNumber} minNum = ${minNum}, maxNum = ${maxNum}`)
+        
+    let newNum = () => {
+      console.log(`In the newNum function min = ${minNum} and max = ${maxNum}`);
+      return Math.floor((minNum + maxNum) / 2);
+      };
+
+    console.log(randomNumber = newNum(minNum, maxNum));
 
     guess = await ask(`Is your number ${randomNumber}? \nYes or No y/n \n`);
+
     numberOfGuesses++;
-    if (guess === "y"){
-      console.log(`I guessed your number in ${numberOfGuesses} attempts!`)
+
+    if (guess === "y") {
+      console.log(`I guessed your number in ${numberOfGuesses} attempts!`);
       process.exit();
-  }
-}}
+    }
+  }}
 
 
