@@ -161,6 +161,7 @@ When the game finishes, instead of exiting, it should ask you if you want to pla
 
 When the game finishes modify the victory message so it tells the user how many guesses it took for the computer to guess the correct number.
 
+
 **Combine the games**
 
 Modify the program in `index.js` so that the user can choose whether to play the normal game, or the reverse game when the program is started with `node index.js`
