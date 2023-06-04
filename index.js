@@ -16,7 +16,7 @@ async function start(){
   if (gameChoice.trim().toLowerCase() == "human"){
     startReverseGame()
   }else if (gameChoice.trim().toLowerCase() == "computer"){
-     startGame()
+    startGame()
   } else {
     console.log("That is not a valid option.");
     start()
@@ -75,11 +75,6 @@ async function startGame() {
   //*************GAME LOOP**************** */
   
   while (gameOn) {
-    
-    console.log(`The randomNumber on the new iteration of the while loop is ${randomNumber}`)
-
-
-    console.log(`This is ${numberOfGuesses} minNum = ${minNum} and maxNum = ${maxNum}`)
 
     let response = await ask("Is your number higher or lower h/l? \n");
 
@@ -94,7 +89,7 @@ async function startGame() {
       response = await ask("Is your number higher or lower h/l? \n");
     }
 
-    if (minNum == maxNum){
+    if ((minNum > maxNum) || (maxNum < minNum)){
       console.log(`You're cheating! Game Over`)
       process.exit()
     }
@@ -102,15 +97,11 @@ async function startGame() {
     console.log(`This console is after if/esle statement randomNumber = ${randomNumber} minNum = ${minNum}, maxNum = ${maxNum}`)
         
     let generateNewNum = () => {
-      console.log(`In the newNum function min = ${minNum} and max = ${maxNum}`);
-      let temporaryNumber = minNum + maxNum
-      console.log(temporaryNumber)
-      let firstAnswer = Math.floor((temporaryNumber) / 2);
-      console.log(firstAnswer)
+      let firstAnswer = Math.floor((minNum + maxNum) / 2);
       return firstAnswer
       };
 
-    console.log(randomNumber = generateNewNum(minNum, maxNum));
+    randomNumber = generateNewNum(minNum, maxNum);
 
     guess = await ask(`Is your number ${randomNumber}? \nYes or No y/n \n`);
 
@@ -118,9 +109,17 @@ async function startGame() {
 
     if (guess === "y") {
       console.log(`I guessed your number in ${numberOfGuesses} attempts!`);
-      process.exit();
+      gameOn = false
     }
-  }}
+  }
+  
+  let gameOver = await ask("Do you want to play again? y/n\n")
+  
+  if (gameOver == "y"){
+    startGame()
+  } else{
+  process.exit();}
+}
 
 
 async function startReverseGame() {
@@ -138,8 +137,7 @@ async function startReverseGame() {
   }
 
   let randomNumber = Math.floor(Math.random() * maxStart + 1);
-  //console.log(randomNumber) //just for building, remove before actually playing
-
+  
   let guess = await ask(`What is your guess? \n`);
   let gameOn = true;
   let numberOfGuesses = 1;
@@ -163,10 +161,18 @@ async function startReverseGame() {
       console.log("That's too low. Pick a higher number. ");
     } else {
       console.log(`You guessed my number in ${numberOfGuesses} tries!`);
-      process.exit();
+      gameOn = false
     }
 
     guess = await ask(`What is your guess? \n`);
     numberOfGuesses++;
   }
+
+    let gameOver = await ask("Do you want to play again? y/n\n");
+
+    if (gameOver == "y") {
+      startGame();
+    } else {
+      process.exit();
+    }
 }
