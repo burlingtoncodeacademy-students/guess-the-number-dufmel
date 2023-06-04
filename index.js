@@ -64,6 +64,13 @@ async function start() {
       newNum(min, max);
     }
 
+    console.log(min, max)
+    if (newNum > max ){
+      console.log(`You already said it was higher than ${max} so it cannot also be higher than ${max + 1}`)
+    } else if (newNum < min){
+      console.log(`You already said it was lower than ${min} so it cannot also be higher than ${min - 1}`)
+    }
+
     guess = await ask(`Is your number ${randomNumber}? \nYes or No y/n \n`);
     numberOfGuesses++;
     if (guess === "y"){
