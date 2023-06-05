@@ -33,7 +33,7 @@ async function startGame() {
   let maxStart = await ask("What is the top of the range you want me to guess between?\n"
   );
 
-  if((maxStart <= 1) || isNaN(maxStart)){
+  while((maxStart <= 1) || isNaN(maxStart)){
     console.log("You must enter a positive interger great than 1");
     maxStart = await ask("What is the top of the range you want me to guess between?\n"
     );
@@ -43,7 +43,7 @@ async function startGame() {
     "What is your secret number?\nI won't peek, I promise...\n"
   );
 
-  if (isNaN(secretNumber)){
+  while (isNaN(secretNumber)){
     console.log("That is not a valid input")
     secretNumber = await ask(
       "What is your secret number?\nI won't peek, I promise...\n"
@@ -52,25 +52,25 @@ async function startGame() {
 
   console.log("You entered: " + secretNumber);
 
-  let randomNumber = Math.floor(Math.random() * (maxStart) + 1);
+  let minNum = Number(1);
+  let maxNum = Number(maxStart);
+
+  let smartGuess = () => {
+  return Math.floor((minNum + maxNum) / 2);
+  };
+
+  let randomNumber = smartGuess()
 
   let guess = await ask(`Is your number ${randomNumber}? \nYes or No y/n \n`);
   let gameOn = true;
+  let numberOfGuesses = 1;
 
   if (guess.trim().toLowerCase() === "n") {
     gameOn = true;
   } else if (guess === "y") {
     console.log(`I guessed your number in ${numberOfGuesses} attempt!`);
     process.exit();
-  } else {
-    console.log("That is not a valid option")
-    guess = await ask(`Is your number ${randomNumber}? \nYes or No y/n \n`);
-  }
-
-  let minNum = Number(1);
-  let maxNum = Number(maxStart);
-  let numberOfGuesses = 1;
-
+  } 
   
   //*************GAME LOOP**************** */
   
@@ -80,28 +80,17 @@ async function startGame() {
 
     if (response.trim().toLowerCase() === "h") {
       minNum = randomNumber + 1;
-      console.log(`In the if statement, randomNumber = ${randomNumber}`)
-    } else if (response.trim().toLowerCase() === "l") {
+      } else if (response.trim().toLowerCase() === "l") {
       maxNum = randomNumber - 1;
-      console.log(`In the else if statement, randomNumber = ${randomNumber}`);
-    } else {
-      console.log("That is not a valid entry")
-      response = await ask("Is your number higher or lower h/l? \n");
+      
+    }  
+
+    if (minNum > maxNum || maxNum < minNum) {
+      console.log(`You're cheating! Game Over`);
+      process.exit();
     }
 
-    if ((minNum > maxNum) || (maxNum < minNum)){
-      console.log(`You're cheating! Game Over`)
-      process.exit()
-    }
-
-    console.log(`This console is after if/esle statement randomNumber = ${randomNumber} minNum = ${minNum}, maxNum = ${maxNum}`)
-        
-    let generateNewNum = () => {
-      let firstAnswer = Math.floor((minNum + maxNum) / 2);
-      return firstAnswer
-      };
-
-    randomNumber = generateNewNum(minNum, maxNum);
+    randomNumber = smartGuess(minNum, maxNum);
 
     guess = await ask(`Is your number ${randomNumber}? \nYes or No y/n \n`);
 
@@ -116,11 +105,12 @@ async function startGame() {
   let gameOver = await ask("Do you want to play again? y/n\n")
   
   if (gameOver == "y"){
-    startGame()
+    start()
   } else{
   process.exit();}
 }
 
+//*******************REVERSE GAME************************** */
 
 async function startReverseGame() {
   console.log(
@@ -131,7 +121,7 @@ async function startReverseGame() {
     "I will choose between 1 and whatever you select as the top of the range. What is the top of the range you would like?\n"
   );
 
-  if (maxStart <= 1 || isNaN(maxStart)) {
+  while (maxStart <= 1 || isNaN(maxStart)) {
     console.log("You must enter a positive interger great than 1");
     maxStart = await ask("What is the top of the range you would like?\n");
   }
@@ -171,7 +161,7 @@ async function startReverseGame() {
     let gameOver = await ask("Do you want to play again? y/n\n");
 
     if (gameOver == "y") {
-      startGame();
+      start();
     } else {
       process.exit();
     }
