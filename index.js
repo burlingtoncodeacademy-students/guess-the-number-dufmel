@@ -1,3 +1,5 @@
+//Sets up access to Readline
+
 const { truncate } = require('fs');
 const readline = require('readline');
 const rl = readline.createInterface(process.stdin, process.stdout);
@@ -7,6 +9,8 @@ function ask(questionText) {
     rl.question(questionText, resolve);
   });
 }
+
+//Prompts user input for game choice
 
 start();
 
@@ -23,7 +27,7 @@ async function start(){
   }
 }
 
-
+//if user selects computer guessing, run this function
 
 async function startGame() {
   console.log(
@@ -72,11 +76,13 @@ async function startGame() {
     process.exit();
   } 
   
-  //*************GAME LOOP**************** */
+  //******GAME LOOP***** This loop runs while game is in session
   
   while (gameOn) {
 
     let response = await ask("Is your number higher or lower h/l? \n");
+
+  // Changes range based on user input
 
     if (response.trim().toLowerCase() === "h") {
       minNum = randomNumber + 1;
@@ -84,11 +90,15 @@ async function startGame() {
       maxNum = randomNumber - 1;
       
     }  
+  
+  // Cheat detector
 
     if (minNum > maxNum || maxNum < minNum) {
       console.log(`You're cheating! Game Over`);
       process.exit();
     }
+
+    //Generates a new random number, asks again, increments guesses
 
     randomNumber = smartGuess(minNum, maxNum);
 
@@ -96,12 +106,16 @@ async function startGame() {
 
     numberOfGuesses++;
 
+    //When computer guesses yes, exit while loop
+
     if (guess === "y") {
       console.log(`I guessed your number in ${numberOfGuesses} attempts!`);
       gameOn = false
     }
   }
   
+  //User can select to start game over(start()) or exit game
+
   let gameOver = await ask("Do you want to play again? y/n\n")
   
   if (gameOver == "y"){
@@ -126,11 +140,14 @@ async function startReverseGame() {
     maxStart = await ask("What is the top of the range you would like?\n");
   }
 
+  // Computer will select number, stored in randomNumber that can't been seen by user
   let randomNumber = Math.floor(Math.random() * maxStart + 1);
   
   let guess = await ask(`What is your guess? \n`);
   let gameOn = true;
   let numberOfGuesses = 1;
+
+  //If user does not guess on first attempt, enter game loop
 
   if (guess == randomNumber) {
     console.log(`You guessed my number in ${numberOfGuesses} try!`);
@@ -144,6 +161,7 @@ async function startReverseGame() {
 
   //*************GAME LOOP**************** */
 
+  // Computer will continue to prompt guesses until user guesses correctly. When user guesses correctly, exit game loop
   while (gameOn) {
     if (guess > randomNumber) {
       console.log("That's too high. Pick a lower number.");
@@ -158,6 +176,8 @@ async function startReverseGame() {
     numberOfGuesses++;
   }
 
+  //Prompts user to play again or exit
+  
     let gameOver = await ask("Do you want to play again? y/n\n");
 
     if (gameOver == "y") {
